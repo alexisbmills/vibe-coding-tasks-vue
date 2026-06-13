@@ -6,10 +6,8 @@ import { useAuth } from '@/composables/useAuth';
 import Card from 'primevue/card';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
-import Checkbox from 'primevue/checkbox';
 import SelectButton from 'primevue/selectbutton';
 import ProgressSpinner from 'primevue/progressspinner';
-import Badge from 'primevue/badge';
 import ConfirmDialog from 'primevue/confirmdialog';
 import { useConfirm } from 'primevue/useconfirm';
 import TaskCard from '@/components/TaskCard.vue';
@@ -24,7 +22,6 @@ const {
   filters,
   isLoading,
   isError,
-  createTask,
   updateTask,
   deleteTask,
   updateFilters,

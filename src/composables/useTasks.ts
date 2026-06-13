@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/vue-query';
 import { useToast } from 'primevue/usetoast';
 import { apiClient } from '@/services/api';
 import type { CreateTaskRequest, UpdateTaskRequest, TaskFilters, TaskResponse } from '@/types/api';
+import {AxiosError} from "axios";
 
 export function useTasks() {
   const toast = useToast();
@@ -58,7 +59,7 @@ export function useTasks() {
 
       return { previousTasks };
     },
-    onError: (error, newTask, context) => {
+    onError: (error: AxiosError<{detail: string}>, _newTask, context) => {
       // Revert optimistic update on error
       if (context?.previousTasks) {
         queryClient.setQueryData(['tasks', filters.value], context.previousTasks);
@@ -111,7 +112,7 @@ export function useTasks() {
 
       return { previousTasks };
     },
-    onError: (error, variables, context) => {
+    onError: (error: AxiosError<{detail: string}>, _variables, context) => {
       if (context?.previousTasks) {
         queryClient.setQueryData(['tasks', filters.value], context.previousTasks);
       }
@@ -158,7 +159,7 @@ export function useTasks() {
 
       return { previousTasks };
     },
-    onError: (error, taskId, context) => {
+    onError: (error: AxiosError<{detail: string}>, _taskId, context) => {
       if (context?.previousTasks) {
         queryClient.setQueryData(['tasks', filters.value], context.previousTasks);
       }
