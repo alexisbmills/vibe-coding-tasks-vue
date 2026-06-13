@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/vue-query';
 import { useRouter } from 'vue-router';
 import { useToast } from 'primevue/usetoast';
+import { storeToRefs } from 'pinia';
 import { useAuthStore } from '@/stores/auth';
 import { apiClient } from '@/services/api';
-import { logoutUser, logoutUserSimple } from '@/utils/logoutUser';
 import type { RegisterRequest, LoginRequest, UserProfileUpdateRequest } from '@/types/api';
 
 export function useAuth() {
@@ -80,16 +80,30 @@ export function useAuth() {
     },
   });
 
+  /**
+   * Logs out the user, clears cache, shows a toast, and redirects to login.
+   * This function is intended to be called from within a Vue component or composable.
+   */
   const logout = () => {
-    logoutUser();
+    authStore.logout();
+    queryClient.clear();
+    toast.add({
+      severity: 'info',
+      summary: 'Logged Out',
+      detail: 'You have been logged out successfully.',
+      life: 3000,
+    });
+    router.push('/login');
   };
+
+  const { isAuthenticated, user } = storeToRefs(authStore);
 
   return {
     register: registerMutation,
     login: loginMutation,
     updateProfile: updateProfileMutation,
     logout,
-    isAuthenticated: authStore.isAuthenticated,
-    user: authStore.user,
+    isAuthenticated,
+    user,
   };
 }

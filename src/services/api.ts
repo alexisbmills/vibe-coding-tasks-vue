@@ -1,6 +1,5 @@
-import axios, { AxiosInstance, AxiosResponse } from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import { useAuthStore } from '@/stores/auth';
-import { useToast } from 'primevue/usetoast';
 import { logoutUserSimple } from '@/utils/logoutUser';
 import type {
   RegisterRequest,

@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import {computed, ref} from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useAuth } from '@/composables/useAuth';
 import Menubar from 'primevue/menubar';
-import Button from 'primevue/button';
 import Avatar from 'primevue/avatar';
+import Menu from 'primevue/menu';
 
 const router = useRouter();
 const route = useRoute();
@@ -40,6 +40,7 @@ const items = computed(() => {
   ];
 });
 
+const menu = ref();
 const userMenu = computed(() => [
   {
     label: 'Profile',
@@ -98,9 +99,12 @@ const initials = computed(() => {
           <Avatar 
             :label="initials"
             shape="circle"
-            class="user-avatar cursor-pointer"
-            @click="$refs.userMenu.toggle($event)"
+            class="user-avatar"
+            aria-haspopup="true"
+            aria-controls="user_menu"
+            @click="menu.toggle($event)"
           />
+          <Menu ref="menu" id="user_menu" :model="userMenu" :popup="true" />
         </div>
       </template>
     </Menubar>
@@ -146,6 +150,7 @@ const initials = computed(() => {
 .user-section {
   display: flex;
   align-items: center;
+  gap: 0.5rem;
 }
 
 .user-name {
@@ -161,6 +166,7 @@ const initials = computed(() => {
 
 .user-avatar:hover {
   background-color: var(--p-primary-600);
+  cursor: pointer;
 }
 
 @media (max-width: 768px) {
