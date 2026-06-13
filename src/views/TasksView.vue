@@ -173,7 +173,7 @@ const displayName = computed(() => {
             </div>
             
             <Button
-              v-if="searchQuery || selectedFilter !== 'all'"
+              :disabled="!searchQuery && selectedFilter === 'all'"
               label="Clear"
               icon="pi pi-times"
               severity="secondary"
