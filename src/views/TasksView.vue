@@ -157,7 +157,7 @@ const displayName = computed(() => {
                 v-model="searchQuery"
                 placeholder="Search tasks..."
                 class="search-input"
-                @input="handleSearch($event.target.value)"
+                @input="handleSearch($event.target?.value)"
               />
             </div>
             
@@ -165,6 +165,7 @@ const displayName = computed(() => {
               <SelectButton
                 v-model="selectedFilter"
                 :options="filterOptions"
+                :allow-empty="false"
                 option-label="label"
                 option-value="value"
                 class="filter-buttons"
