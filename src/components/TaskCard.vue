@@ -5,7 +5,6 @@ import Card from 'primevue/card';
 import Button from 'primevue/button';
 import Checkbox from 'primevue/checkbox';
 import Badge from 'primevue/badge';
-import { boolean } from 'zod/v4';
 
 interface Props {
   task: TaskResponse;
@@ -63,7 +62,8 @@ const handleDelete = () => {
           <div class="task-header">
             <Checkbox
               :modelValue="task.isCompleted"
-              @change="handleCompleteToggle($event.checked)"
+              :binary="true"
+              @update:modelValue="handleCompleteToggle"
               class="task-checkbox"
               :aria-label="`Mark task '${task.name}' as ${task.isCompleted ? 'incomplete' : 'complete'}`"
             />
