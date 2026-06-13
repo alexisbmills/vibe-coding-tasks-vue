@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted, computed } from 'vue';
+import {ref, reactive, computed, watch} from 'vue';
 import { useRouter } from 'vue-router';
 import { useQuery } from '@tanstack/vue-query';
 import { useTasks } from '@/composables/useTasks';
@@ -28,21 +28,22 @@ const form = reactive({
 
 const errors = ref<Record<string, string>>({});
 
-const taskQuery = useQuery({
+const {data: taskQueryData, isPending, isError} = useQuery({
   queryKey: ['task', props.id],
   queryFn: () => apiClient.getTask(props.id),
 });
 
-const task = computed(() => taskQuery.data.value);
+const task = computed(() => taskQueryData.value);
 
-onMounted(() => {
-  if (task.value) {
-    form.name = task.value.name || '';
-    form.notes = task.value.notes || '';
-    form.isCompleted = task.value.isCompleted;
-    form.isArchived = task.value.isArchived;
+
+watch([isPending, taskQueryData], ([pending, currentData]) => {
+  if (!pending && currentData) {
+    form.name = currentData.name || '';
+    form.notes = currentData.notes || '';
+    form.isCompleted = currentData.isCompleted;
+    form.isArchived = currentData.isArchived;
   }
-});
+})
 
 const validateForm = () => {
   errors.value = {};
@@ -98,14 +99,12 @@ const handleCancel = () => {
         </div>
       </div>
 
-      <!-- Loading State -->
-      <div v-if="taskQuery.isLoading.value" class="loading-state">
+      <div v-if="isPending" class="loading-state">
         <ProgressSpinner />
         <p>Loading task details...</p>
       </div>
 
-      <!-- Error State -->
-      <div v-else-if="taskQuery.isError.value" class="error-state">
+      <div v-else-if="isError" class="error-state">
         <i class="pi pi-exclamation-triangle text-4xl text-orange-500 mb-3"></i>
         <h3 class="text-xl font-semibold mb-2">Task not found</h3>
         <p class="text-surface-600 mb-4">
@@ -118,7 +117,6 @@ const handleCancel = () => {
         />
       </div>
 
-      <!-- Form -->
       <Card v-else-if="task" class="task-form-card">
         <template #content>
           <form @submit.prevent="handleSubmit" class="task-form">
