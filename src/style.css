@@ -132,10 +132,6 @@ body {
   transition: all 0.2s ease;
 }
 
-.p-button:hover {
-  transform: translateY(-1px);
-}
-
 .p-inputtext,
 .p-textarea {
   border-radius: var(--border-radius-md);
