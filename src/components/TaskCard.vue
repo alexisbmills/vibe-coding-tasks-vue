@@ -114,7 +114,7 @@ const handleDelete = () => {
           />
           
           <Button
-            :icon="task.isArchived ? 'pi pi-inbox' : 'pi pi-archive'"
+            :icon="task.isArchived ? 'pi pi-inbox' : 'pi pi-inbox'"
             severity="secondary"
             text
             rounded
